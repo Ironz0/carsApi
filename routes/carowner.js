@@ -2,28 +2,39 @@ const express = require('express');
 const router = express.Router();
 const carowner = require('../models/carowner_model');
 
-router.get('/:id?',
- function(request, response) {
-  if (request.params.id) {
-    carowner.getById(request.params.id, function(err, dbResult) {
+router.get('/', function(request, response) {
+  carowner.get(function(err, dbResult) {
       if (err) {
-        response.json(err);
+          response.json(err);
       } else {
-        console.log(dbResult[0]);
-        response.json(dbResult[0]);
+          response.json(dbResult);
       }
-    });
-  } else {
-    carowner.get(function(err, dbResult) {
-      if (err) {
-        response.json(err);
-      } else {
-        response.json(dbResult);
-      }
-    });
-  }
+  });
 });
 
+
+
+router.get('/cars', function(request, response) {
+  carowner.OwnerCar( function(err, dbResult) {
+      if (err) {
+           response.json(err) ;
+      } else {
+           response.json(dbResult) ;
+      } ;
+  }); 
+});
+
+router.get('/:id?', function(request, response,) {
+  if (request.params.id) {
+      carowner.getById(request.params.id, function(err, dbResult) {
+          if (err) {
+          response.json(err);
+          } else {
+          response.json(dbResult);
+          }
+      });
+  }
+});
 
 router.post('/', 
 function(request, response) {
